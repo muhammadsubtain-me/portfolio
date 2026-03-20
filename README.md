@@ -1,6 +1,6 @@
-# My Portfolio Wesbite - Overview 🚀
+# My Portfolio Webbite - Overview 🚀
 
-This repository contains the open source version of my porfolio website.
+This repository contains the open source version of my portfolio website.
 Do check it out!
 
 
