@@ -215,23 +215,18 @@
 
 .landing-info h2 {
   margin: 0;
-  margin-top: -20px;
+  margin-top: 5px; /* Added space to prevent clipping */
   margin-left: 20px;
   font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 32px;
-  line-height: 40px;
+  line-height: 1.2; /* Better spacing for stacked text */
   position: relative;
-  display: flex;
-  flex-wrap: nowrap;
+  display: block;    /* Changed from flex to block for vertical flow */
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
-.landing-h2-info-1 {
-  position: absolute;
-  top: 0;
-}
 
 h2.landing-info-h2 {
   color: #14b8a6;
@@ -244,22 +239,14 @@ h2.landing-info-h2 {
   margin-left: -5px;
 }
 
+.landing-h2-info-1,
 .landing-h2-2 {
-  position: absolute;
-  top: 0;
+  position: relative; /* Changed from absolute */
+  display: block;      /* Ensures words sit on their own lines */
 }
 
 .landing-info-h2::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 120%;
-  z-index: 3;
-  background-image: linear-gradient(0deg,
-      var(--backgroundColor) 40%,
-      rgba(0, 0, 0, 0) 110%);
-  top: 0;
-  left: 0;
+  display: none; /* Removes the dark fade that was hiding the text */
 }
 
 @media screen and (min-width: 500px) {

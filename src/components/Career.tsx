@@ -36,8 +36,7 @@ const Career = () => {
             </div>
             <p>
               Pursuing a degree in Computer Science with a CGPA of 3.53 / 4.0.
-              Top 50 Nationwide Qualifier for the 20th National Science Talent Contest (2023)
-              under the STEM career program (HEC and PIEAS).
+             
             </p>
           </div>
           <div className="career-info-box">
@@ -46,10 +45,11 @@ const Career = () => {
                 <h4>FSc (Pre-Engineering)</h4>
                 <h5>PAEC Model College for Boys Chashma</h5>
               </div>
-              <h3>2022 - 2024</h3>
+              <h3>2024</h3>
             </div>
             <p>
-              Completed high school with Grade: A.
+              Completed high school with Grade A.  Top 50 Nationwide Qualifier for the 20th National Science Talent Contest (2023)
+              under the STEM career program (HEC and PIEAS).
             </p>
           </div>
         </div>

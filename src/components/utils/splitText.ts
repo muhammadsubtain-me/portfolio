@@ -1,80 +1,78 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
-import { SplitText } from "gsap-trial/SplitText";
+// import { ScrollSmoother } from "gsap-trial/ScrollSmoother"; // COMMENTED OUT TRIAL
+// import { SplitText } from "gsap-trial/SplitText"; // COMMENTED OUT TRIAL
 
 interface ParaElement extends HTMLElement {
   anim?: gsap.core.Animation;
-  split?: SplitText;
+  // split?: any; // Changed from SplitText to any
 }
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+// Register only the free ScrollTrigger
+gsap.registerPlugin(ScrollTrigger);
 
 export default function setSplitText() {
   ScrollTrigger.config({ ignoreMobileResize: true });
   if (window.innerWidth < 900) return;
+
   const paras: NodeListOf<ParaElement> = document.querySelectorAll(".para");
   const titles: NodeListOf<ParaElement> = document.querySelectorAll(".title");
 
   const TriggerStart = window.innerWidth <= 1024 ? "top 60%" : "20% 60%";
   const ToggleAction = "play pause resume reverse";
 
+  // --- REPLACEMENT FOR PARAGRAPHS ---
   paras.forEach((para: ParaElement) => {
     para.classList.add("visible");
+    
+    // Kill existing animations to prevent overlaps
     if (para.anim) {
-      para.anim.progress(1).kill();
-      para.split?.revert();
+      para.anim.kill();
     }
 
-    para.split = new SplitText(para, {
-      type: "lines,words",
-      linesClass: "split-line",
-    });
-
+    // Instead of splitting words, we fade in the whole paragraph smoothly
     para.anim = gsap.fromTo(
-      para.split.words,
-      { autoAlpha: 0, y: 80 },
+      para,
+      { autoAlpha: 0, y: 30 },
       {
         autoAlpha: 1,
-        scrollTrigger: {
-          trigger: para.parentElement?.parentElement,
-          toggleActions: ToggleAction,
-          start: TriggerStart,
-        },
+        y: 0,
         duration: 1,
         ease: "power3.out",
-        y: 0,
-        stagger: 0.02,
-      }
-    );
-  });
-  titles.forEach((title: ParaElement) => {
-    if (title.anim) {
-      title.anim.progress(1).kill();
-      title.split?.revert();
-    }
-    title.split = new SplitText(title, {
-      type: "chars,lines",
-      linesClass: "split-line",
-    });
-    title.anim = gsap.fromTo(
-      title.split.chars,
-      { autoAlpha: 0, y: 80, rotate: 10 },
-      {
-        autoAlpha: 1,
         scrollTrigger: {
-          trigger: title.parentElement?.parentElement,
+          trigger: para,
           toggleActions: ToggleAction,
           start: TriggerStart,
         },
-        duration: 0.8,
-        ease: "power2.inOut",
-        y: 0,
-        rotate: 0,
-        stagger: 0.03,
       }
     );
   });
 
-  ScrollTrigger.addEventListener("refresh", () => setSplitText());
+  // --- REPLACEMENT FOR TITLES ---
+  titles.forEach((title: ParaElement) => {
+    if (title.anim) {
+      title.anim.kill();
+    }
+
+    // Instead of splitting characters, we do a professional "Slide & Fade"
+    title.anim = gsap.fromTo(
+      title,
+      { autoAlpha: 0, y: 40, rotate: 2 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        rotate: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: title,
+          toggleActions: ToggleAction,
+          start: TriggerStart,
+        },
+      }
+    );
+  });
+
+  // Removed the refresh event listener that calls setSplitText 
+  // to prevent infinite loops now that SplitText isn't resetting.
 }

@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import "./styles/TechStack.css";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SiReact, SiNextdotjs, SiJavascript, SiNodedotjs, SiCplusplus, SiTailwindcss, SiHtml5, SiMongodb, SiPostgresql, SiGithub } from "react-icons/si";
+import { SiReact, SiNextdotjs, SiJavascript, SiNodedotjs, SiTailwindcss, SiHtml5, SiMongodb, SiPostgresql, SiGithub } from "react-icons/si";
+import { FaJava } from "react-icons/fa";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +12,7 @@ const skills = [
   { name: "Next.js", percentage: 85, color: "#ffffff", icon: <SiNextdotjs size={36} color="#ffffff" /> },
   { name: "JavaScript", percentage: 90, color: "#f7df1e", icon: <SiJavascript size={36} color="#f7df1e" /> },
   { name: "Node.js", percentage: 80, color: "#339933", icon: <SiNodedotjs size={36} color="#339933" /> },
-  { name: "C++", percentage: 85, color: "#00599C", icon: <SiCplusplus size={36} color="#00599C" /> },
+  { name: "Java", percentage: 80, color: "#007396", icon: <FaJava size={36} color="#007396" /> },
   { name: "Tailwind CSS", percentage: 90, color: "#38b2ac", icon: <SiTailwindcss size={36} color="#38b2ac" /> },
   { name: "HTML/CSS", percentage: 95, color: "#e34f26", icon: <SiHtml5 size={36} color="#e34f26" /> },
   { name: "MongoDB", percentage: 80, color: "#47A248", icon: <SiMongodb size={36} color="#47A248" /> },

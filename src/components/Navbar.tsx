@@ -2,19 +2,22 @@ import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
+// import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import { FaCommentDots } from "react-icons/fa6";
 import "./styles/Navbar.css";
 
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+// --- COMMENTED OUT TRIAL PLUGIN REGISTRATION ---
+gsap.registerPlugin(ScrollTrigger); 
+// export let smoother: any; // Commented out to prevent errors
 
 import { useState } from "react";
 import ChatBox from "./ChatBox";
 
 const Navbar = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  
   useEffect(() => {
+    /* // --- COMMENTED OUT TRIAL SMOOTHER BLOCK ---
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
@@ -27,23 +30,32 @@ const Navbar = () => {
 
     smoother.scrollTop(0);
     smoother.paused(true);
+    */
 
     let links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
       let element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
-        if (window.innerWidth > 1024) {
+        // Updated to use standard browser smooth scroll since Smoother is disabled
+        const href = element.getAttribute("data-href");
+        if (href && href.startsWith("#")) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
+          const targetId = href.replace("#", "");
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+          }
         }
       });
     });
+
+    /*
     window.addEventListener("resize", () => {
       ScrollSmoother.refresh(true);
     });
+    */
   }, []);
+
   return (
     <>
       <div className="header">
