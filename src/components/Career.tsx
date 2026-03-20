@@ -35,7 +35,7 @@ const Career = () => {
               <h3>2024 - Present</h3>
             </div>
             <p>
-              Pursuing a degree in Computer Science with a CGPA of 3.53 / 4.0.
+              Pursuing a degree in Computer Science with focus on web development.
              
             </p>
           </div>

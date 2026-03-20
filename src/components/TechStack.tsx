@@ -3,7 +3,7 @@ import "./styles/TechStack.css";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  SiReact, SiNextdotjs, SiJavascript, SiNodedotjs,
+  SiReact, SiNextdotjs, SiJavascript, SiExpress,
   SiTailwindcss, SiHtml5, SiMongodb, SiPostgresql, SiGithub
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
@@ -11,16 +11,16 @@ import { FaJava } from "react-icons/fa";
 gsap.registerPlugin(ScrollTrigger);
 
 const skills = [
-  { name: "React.js",     percentage: 90, color: "#61dafb", icon: SiReact,       iconColor: "#61dafb" },
-  { name: "Next.js",      percentage: 85, color: "#ffffff", icon: SiNextdotjs,   iconColor: "#ffffff" },
-  { name: "JavaScript",   percentage: 90, color: "#f7df1e", icon: SiJavascript,  iconColor: "#f7df1e" },
-  { name: "Node.js",      percentage: 80, color: "#339933", icon: SiNodedotjs,   iconColor: "#339933" },
-  { name: "Java",         percentage: 80, color: "#007396", icon: FaJava,         iconColor: "#007396" },
-  { name: "Tailwind CSS", percentage: 90, color: "#38b2ac", icon: SiTailwindcss, iconColor: "#38b2ac" },
-  { name: "HTML/CSS",     percentage: 95, color: "#e34f26", icon: SiHtml5,        iconColor: "#e34f26" },
-  { name: "MongoDB",      percentage: 80, color: "#47A248", icon: SiMongodb,     iconColor: "#47A248" },
-  { name: "PostgreSQL",   percentage: 75, color: "#4169E1", icon: SiPostgresql,  iconColor: "#4169E1" },
-  { name: "Git/GitHub",   percentage: 85, color: "#F05032", icon: SiGithub,      iconColor: "#F05032" },
+  { name: "React.js",     percentage: 80, color: "#61dafb", icon: SiReact,       iconColor: "#61dafb" },
+  { name: "Next.js",      percentage: 75, color: "#ffffff", icon: SiNextdotjs,   iconColor: "#ffffff" },
+  { name: "JavaScript",   percentage: 80, color: "#f7df1e", icon: SiJavascript,  iconColor: "#f7df1e" },
+  { name: "Express.js",   percentage: 70, color: "#ffffff", icon: SiExpress,     iconColor: "#ffffff" },
+  { name: "Java",         percentage: 70, color: "#007396", icon: FaJava,        iconColor: "#007396" },
+  { name: "Tailwind CSS", percentage: 80, color: "#38b2ac", icon: SiTailwindcss, iconColor: "#38b2ac" },
+  { name: "HTML/CSS",     percentage: 85, color: "#e34f26", icon: SiHtml5,       iconColor: "#e34f26" },
+  { name: "MongoDB",      percentage: 70, color: "#47A248", icon: SiMongodb,     iconColor: "#47A248" },
+  { name: "PostgreSQL",   percentage: 65, color: "#4169E1", icon: SiPostgresql,  iconColor: "#4169E1" },
+  { name: "Git/GitHub",   percentage: 75, color: "#F05032", icon: SiGithub,      iconColor: "#F05032" },
 ];
 
 function getCircleSize() {

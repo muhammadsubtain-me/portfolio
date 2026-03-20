@@ -126,11 +126,21 @@ const Work = () => {
         </h2>
 
         <div className="carousel-wrapper">
-          {/* Desktop arrows */}
-          <button className="carousel-arrow carousel-arrow-left" onClick={goToPrev} aria-label="Previous project" data-cursor="disable">
+          {/* Desktop arrows — visible on screens > 600px, sit inside the wrapper */}
+          <button
+            className="carousel-arrow carousel-arrow-left"
+            onClick={goToPrev}
+            aria-label="Previous project"
+            data-cursor="disable"
+          >
             <MdArrowBack />
           </button>
-          <button className="carousel-arrow carousel-arrow-right" onClick={goToNext} aria-label="Next project" data-cursor="disable">
+          <button
+            className="carousel-arrow carousel-arrow-right"
+            onClick={goToNext}
+            aria-label="Next project"
+            data-cursor="disable"
+          >
             <MdArrowForward />
           </button>
 
@@ -168,7 +178,7 @@ const Work = () => {
               ))}
             </div>
 
-            {/* ── Mobile scrollbar — INSIDE track container, sits just above the bottom border ── */}
+            {/* ── Mobile scrollbar ── */}
             <div
               className="mobile-scrollbar-track"
               ref={trackRef}
@@ -194,7 +204,9 @@ const Work = () => {
             {projects.map((_, index) => (
               <button
                 key={index}
-                className={`carousel-dot ${index === currentIndex ? "carousel-dot-active" : ""}`}
+                className={`carousel-dot ${
+                  index === currentIndex ? "carousel-dot-active" : ""
+                }`}
                 onClick={() => goToSlide(index)}
                 aria-label={`Go to project ${index + 1}`}
                 data-cursor="disable"

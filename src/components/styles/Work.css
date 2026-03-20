@@ -26,7 +26,6 @@
 .carousel-wrapper {
   position: relative;
   width: 100%;
-  /* Clip any slide bleed at the wrapper level too */
   overflow: hidden;
 }
 
@@ -42,18 +41,15 @@
   display: flex;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
-  /* Ensure track never exceeds its container */
   width: 100%;
 }
 
 .carousel-slide {
   min-width: 100%;
-  /* Use width instead of min-width alone to be explicit */
   width: 100%;
   flex-shrink: 0;
   box-sizing: border-box;
   padding: 50px 0;
-  /* Clip any internal overflow within each slide */
   overflow: hidden;
 }
 
@@ -63,7 +59,7 @@
   gap: 40px;
   width: 100%;
   min-height: 300px;
-  padding: 0 15px;
+  padding: 0 80px;
   box-sizing: border-box;
 }
 
@@ -72,7 +68,6 @@
   display: flex;
   gap: 30px;
   align-items: flex-start;
-  /* Prevent info from overflowing its flex cell */
   min-width: 0;
 }
 
@@ -159,8 +154,8 @@
   box-shadow: 0 0 20px rgba(94, 234, 212, 0.15);
 }
 
-.carousel-arrow-left { left: -70px; }
-.carousel-arrow-right { right: -70px; }
+.carousel-arrow-left  { left: 16px; }
+.carousel-arrow-right { right: 16px; }
 
 /* ── Desktop Dot Indicators ── */
 .carousel-dots {
@@ -251,37 +246,30 @@
 }
 
 /* ── Responsive ── */
-@media only screen and (max-width: 1600px) {
-  .carousel-arrow-left { left: -60px; }
-  .carousel-arrow-right { right: -60px; }
-}
-
 @media only screen and (max-width: 1400px) {
-  .work-section h2 { font-size: 50px; }
+  .work-section h2  { font-size: 50px; }
   .carousel-details h4 { font-size: 22px; }
-  .carousel-number h3 { font-size: 45px; }
-  .carousel-content { gap: 40px; }
-  .carousel-arrow-left { left: 10px; }
-  .carousel-arrow-right { right: 10px; }
+  .carousel-number h3  { font-size: 45px; }
+  .carousel-content    { gap: 40px; padding: 0 70px; }
 }
 
 @media only screen and (max-width: 1025px) {
-  .carousel-content { flex-direction: column; gap: 30px; }
-  .carousel-info { width: 100%; }
-  .carousel-image-wrapper { width: 100%; }
-  .carousel-arrow { width: 40px; height: 40px; font-size: 18px; }
-  .carousel-arrow-left { left: 10px; }
-  .carousel-arrow-right { right: 10px; }
+  .carousel-content        { flex-direction: column; gap: 30px; padding: 0 60px; }
+  .carousel-info           { width: 100%; }
+  .carousel-image-wrapper  { width: 100%; }
+  .carousel-arrow          { width: 40px; height: 40px; font-size: 18px; }
+  .carousel-arrow-left     { left: 10px; }
+  .carousel-arrow-right    { right: 10px; }
 }
 
 @media only screen and (max-width: 900px) {
-  .work-section { padding: 50px 0; }
-  .work-section h2 { font-size: 40px; margin-bottom: 30px; }
-  .carousel-number h3 { font-size: 35px; }
-  .carousel-details h4 { font-size: 20px; }
-  .carousel-content { gap: 20px; }
-  .carousel-slide { padding: 30px 0; }
-  .work-image img { max-height: 250px; }
+  .work-section         { padding: 50px 0; }
+  .work-section h2      { font-size: 40px; margin-bottom: 30px; }
+  .carousel-number h3   { font-size: 35px; }
+  .carousel-details h4  { font-size: 20px; }
+  .carousel-content     { gap: 20px; padding: 0 50px; }
+  .carousel-slide       { padding: 30px 0; }
+  .work-image img       { max-height: 250px; }
 }
 
 /* ── Mobile only ── */
@@ -296,39 +284,32 @@
     display: none;
   }
 
-  /* CRITICAL: both wrapper and container must clip on mobile */
   .carousel-wrapper {
     overflow: hidden;
   }
 
   .carousel-track-container {
     overflow: hidden;
-    /* Ensure it has an explicit width so slides measure correctly */
     width: 100%;
   }
 
   .carousel-track {
-    /* translateX must be based on exact 100% of container width */
     width: 100%;
   }
 
   .carousel-slide {
-    /* Explicit 100% width — min-width alone can be unreliable on mobile */
     min-width: 100%;
     width: 100%;
     padding: 24px 0 44px;
-    /* Hard clip anything inside that bleeds */
     overflow: hidden;
   }
 
   .carousel-content {
     flex-direction: column;
     gap: 16px;
-    /* Use padding not margin so it stays within 100% width */
     padding: 0 16px;
     min-height: unset;
     box-sizing: border-box;
-    /* Prevent any child from pushing width past 100% */
     max-width: 100%;
   }
 
@@ -343,10 +324,10 @@
     box-sizing: border-box;
   }
 
-  .carousel-number h3 { font-size: 28px; }
+  .carousel-number h3  { font-size: 28px; }
   .carousel-details h4 { font-size: 18px; }
-  .carousel-category { font-size: 14px; }
-  .carousel-tools p { font-size: 13px; }
+  .carousel-category   { font-size: 14px; }
+  .carousel-tools p    { font-size: 13px; }
 
   /* Scrollbar track inside container, above bottom border */
   .mobile-scrollbar-track {
