@@ -8,25 +8,25 @@ const projects = [
     title: "Version Control System",
     category: "CLI Tools",
     tools: "C++, Git-like System, File Tracking",
-    image: "public/images/version-control-system-git.png", // fallback image since no unique assets
+    image: "images/version-control-system-git.png", // fallback image since no unique assets
   },
   {
     title: "AI NAECO BLUE Interns Portal",
     category: "Full Stack Portal",
     tools: "React.js, Next.js, Firebase, Node.js",
-    image: "public/images/Pasted image.png",
+    image: "images/Pasted image.png",
   },
   {
     title: "Personal Portfolio Website",
     category: "Web Development",
     tools: "React.js, Tailwind CSS, Responsive Design",
-    image: "public/images/preview.png",
+    image: "images/preview.png",
   },
   {
     title: "Street Fighter Game",
     category: "Game Development",
     tools: "Java, OOP",
-    image: "public/images/street_fighter_primer.0.1488650459.png",
+    image: "images/street_fighter_primer.0.1488650459.png",
   },
 ];
 
