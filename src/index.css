@@ -123,7 +123,18 @@ body {
   font-weight: 400;
   text-transform: uppercase;
 }
+@media (max-width: 1024px) {
+  body {
+    overflow-x: hidden;
+    overflow-y: auto !important;
+  }
 
+  #smooth-wrapper,
+  #smooth-content {
+    overflow: visible !important;
+    height: auto !important;
+  }
+}
 @media screen and (min-width: 768px) {
   body {
     --cWidth: 94%;

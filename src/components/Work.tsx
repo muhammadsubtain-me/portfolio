@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
@@ -33,7 +33,17 @@ const projects = [
 const Work = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const progressRef = useRef<HTMLDivElement>(null);
+
+  // Touch swipe refs
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+
+  // Scrollbar thumb drag refs
+  const trackRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const isDraggingThumb = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartIndex = useRef(0);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -46,16 +56,67 @@ const Work = () => {
   );
 
   const goToPrev = useCallback(() => {
-    const newIndex = currentIndex === 0 ? projects.length - 1 : currentIndex - 1;
-    goToSlide(newIndex);
+    goToSlide(currentIndex === 0 ? projects.length - 1 : currentIndex - 1);
   }, [currentIndex, goToSlide]);
 
   const goToNext = useCallback(() => {
-    const newIndex = currentIndex === projects.length - 1 ? 0 : currentIndex + 1;
-    goToSlide(newIndex);
+    goToSlide(currentIndex === projects.length - 1 ? 0 : currentIndex + 1);
   }, [currentIndex, goToSlide]);
 
-  const progressPercent = ((currentIndex + 1) / projects.length) * 100;
+  // ── Touch swipe on carousel ──
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const dx = touchStartX.current - e.changedTouches[0].clientX;
+    const dy = touchStartY.current - e.changedTouches[0].clientY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      dx > 0 ? goToNext() : goToPrev();
+    }
+  };
+
+  // ── Scrollbar thumb drag (pointer events — works for both touch and mouse) ──
+  const handleThumbPointerDown = (e: React.PointerEvent) => {
+    e.preventDefault();
+    isDraggingThumb.current = true;
+    dragStartX.current = e.clientX;
+    dragStartIndex.current = currentIndex;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handleThumbPointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDraggingThumb.current || !trackRef.current) return;
+      const trackWidth = trackRef.current.offsetWidth;
+      const thumbWidth = trackWidth / projects.length;
+      const dx = e.clientX - dragStartX.current;
+      const indexDelta = Math.round(dx / thumbWidth);
+      const newIndex = Math.max(
+        0,
+        Math.min(projects.length - 1, dragStartIndex.current + indexDelta)
+      );
+      if (newIndex !== currentIndex) goToSlide(newIndex);
+    },
+    [currentIndex, goToSlide]
+  );
+
+  const handleThumbPointerUp = () => {
+    isDraggingThumb.current = false;
+  };
+
+  // Also allow tapping on the track (not thumb) to jump to that slide
+  const handleTrackClick = (e: React.MouseEvent) => {
+    if (!trackRef.current) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const index = Math.floor((x / rect.width) * projects.length);
+    goToSlide(Math.max(0, Math.min(projects.length - 1, index)));
+  };
+
+  const thumbPercent = 100 / projects.length;
+  const thumbOffset = currentIndex * thumbPercent;
 
   return (
     <div className="work-section" id="work">
@@ -65,26 +126,20 @@ const Work = () => {
         </h2>
 
         <div className="carousel-wrapper">
-          {/* Desktop arrows — hidden on mobile */}
-          <button
-            className="carousel-arrow carousel-arrow-left"
-            onClick={goToPrev}
-            aria-label="Previous project"
-            data-cursor="disable"
-          >
+          {/* Desktop arrows */}
+          <button className="carousel-arrow carousel-arrow-left" onClick={goToPrev} aria-label="Previous project" data-cursor="disable">
             <MdArrowBack />
           </button>
-          <button
-            className="carousel-arrow carousel-arrow-right"
-            onClick={goToNext}
-            aria-label="Next project"
-            data-cursor="disable"
-          >
+          <button className="carousel-arrow carousel-arrow-right" onClick={goToNext} aria-label="Next project" data-cursor="disable">
             <MdArrowForward />
           </button>
 
           {/* Slides */}
-          <div className="carousel-track-container">
+          <div
+            className="carousel-track-container"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             <div
               className="carousel-track"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -112,9 +167,29 @@ const Work = () => {
                 </div>
               ))}
             </div>
+
+            {/* ── Mobile scrollbar — INSIDE track container, sits just above the bottom border ── */}
+            <div
+              className="mobile-scrollbar-track"
+              ref={trackRef}
+              onClick={handleTrackClick}
+            >
+              <div
+                className="mobile-scrollbar-thumb"
+                ref={thumbRef}
+                style={{
+                  width: `${thumbPercent}%`,
+                  left: `${thumbOffset}%`,
+                }}
+                onPointerDown={handleThumbPointerDown}
+                onPointerMove={handleThumbPointerMove}
+                onPointerUp={handleThumbPointerUp}
+                onPointerCancel={handleThumbPointerUp}
+              />
+            </div>
           </div>
 
-          {/* Dot Indicators — desktop only */}
+          {/* Desktop dots */}
           <div className="carousel-dots">
             {projects.map((_, index) => (
               <button
@@ -125,38 +200,6 @@ const Work = () => {
                 data-cursor="disable"
               />
             ))}
-          </div>
-
-          {/* Mobile controls — prev/next buttons + progress bar */}
-          <div className="mobile-controls">
-            <button
-              className="mobile-nav-btn"
-              onClick={goToPrev}
-              aria-label="Previous project"
-              data-cursor="disable"
-            >
-              <MdArrowBack size={18} />
-            </button>
-
-            <div className="mobile-progress-wrap" ref={progressRef}>
-              <div
-                className="mobile-progress-bar"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-
-            <span className="mobile-counter">
-              {currentIndex + 1} / {projects.length}
-            </span>
-
-            <button
-              className="mobile-nav-btn"
-              onClick={goToNext}
-              aria-label="Next project"
-              data-cursor="disable"
-            >
-              <MdArrowForward size={18} />
-            </button>
           </div>
         </div>
       </div>
