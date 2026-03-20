@@ -1,42 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
-// import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import { FaCommentDots } from "react-icons/fa6";
 import "./styles/Navbar.css";
 
-// --- COMMENTED OUT TRIAL PLUGIN REGISTRATION ---
-gsap.registerPlugin(ScrollTrigger); 
-// export let smoother: any; // Commented out to prevent errors
+gsap.registerPlugin(ScrollTrigger);
 
-import { useState } from "react";
 import ChatBox from "./ChatBox";
 
 const Navbar = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   useEffect(() => {
-    /* // --- COMMENTED OUT TRIAL SMOOTHER BLOCK ---
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
-
-    smoother.scrollTop(0);
-    smoother.paused(true);
-    */
-
-    let links = document.querySelectorAll(".header ul a");
+    let links = document.querySelectorAll(".header ul a, .mobile-nav a");
     links.forEach((elem) => {
       let element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
-        // Updated to use standard browser smooth scroll since Smoother is disabled
         const href = element.getAttribute("data-href");
         if (href && href.startsWith("#")) {
           e.preventDefault();
@@ -45,65 +26,132 @@ const Navbar = () => {
           if (targetElement) {
             targetElement.scrollIntoView({ behavior: "smooth" });
           }
+          // Close mobile menu on nav click
+          setIsMobileMenuOpen(false);
         }
       });
     });
-
-    /*
-    window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
-    });
-    */
   }, []);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  const navItems = [
+    { label: "ABOUT", href: "#about" },
+    { label: "EDUCATION", href: "#education" },
+    { label: "WORK", href: "#work" },
+    { label: "SKILLS", href: "#skills" },
+    { label: "CONTACT", href: "#contact" },
+  ];
 
   return (
     <>
+      {/* ── Desktop Navbar ── */}
       <div className="header">
-        <div className="header-left" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div className="header-left" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <a href="/#" className="navbar-title" data-cursor="disable">
             HOME
           </a>
         </div>
         <ul>
+          {navItems.map(({ label, href }) => (
+            <li key={label}>
+              <a data-href={href} href={href}>
+                <HoverLinks text={label} />
+              </a>
+            </li>
+          ))}
           <li>
-            <a data-href="#about" href="#about">
-              <HoverLinks text="ABOUT" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#education" href="#education">
-              <HoverLinks text="EDUCATION" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#work" href="#work">
-              <HoverLinks text="WORK" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#skills" href="#skills">
-              <HoverLinks text="SKILLS" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#contact" href="#contact">
-              <HoverLinks text="CONTACT" />
-            </a>
-          </li>
-          <li>
-            <a href="#chat" onClick={(e) => { e.preventDefault(); setIsChatOpen(true); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <a
+              href="#chat"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsChatOpen(true);
+              }}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}
+            >
               <FaCommentDots size={22} />
               <HoverLinks text="LET'S CHAT" />
             </a>
           </li>
         </ul>
+
+        {/* Hamburger button — visible only on mobile */}
+        <button
+          className={`hamburger ${isMobileMenuOpen ? "hamburger--open" : ""}`}
+          onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="Open menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
 
-      <ChatBox isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      {/* ── Mobile Side Panel Overlay ── */}
+      <div
+        className={`mobile-overlay ${isMobileMenuOpen ? "mobile-overlay--visible" : ""}`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
 
-      <div className="landing-circle1"></div>
-      <div className="landing-circle2"></div>
-      <div className="nav-fade"></div>
+      {/* ── Mobile Side Panel ── */}
+      <nav className={`mobile-nav ${isMobileMenuOpen ? "mobile-nav--open" : ""}`}>
+        {/* Panel header */}
+        <div className="mobile-nav__header">
+          <a href="/#" className="navbar-title" data-cursor="disable" onClick={() => setIsMobileMenuOpen(false)}>
+            HOME
+          </a>
+          <button
+            className="mobile-nav__close"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
+
+        <ul className="mobile-nav__list">
+          {navItems.map(({ label, href }, i) => (
+            <li key={label} className="mobile-nav__item" style={{ animationDelay: `${i * 0.07}s` }}>
+              <a
+                data-href={href}
+                href={href}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+          <li className="mobile-nav__item" style={{ animationDelay: `${navItems.length * 0.07}s` }}>
+            <a
+              href="#chat"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMobileMenuOpen(false);
+                setIsChatOpen(true);
+              }}
+              style={{ display: "flex", alignItems: "center", gap: "10px" }}
+            >
+              <FaCommentDots size={20} />
+              LET'S CHAT
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <ChatBox isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <div className="landing-circle1" />
+      <div className="landing-circle2" />
+      <div className="nav-fade" />
     </>
   );
 };

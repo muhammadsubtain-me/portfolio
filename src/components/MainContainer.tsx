@@ -22,19 +22,23 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       setSplitText();
       setIsDesktopView(window.innerWidth > 1024);
     };
+
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
+
     return () => {
       window.removeEventListener("resize", resizeHandler);
     };
-  }, [isDesktopView]);
+  }, []);  // ✅ removed isDesktopView from deps — no need to re-register listener on every resize
 
   return (
     <div className="container-main">
       <Cursor />
       <Navbar />
       <SocialIcons />
+
       {isDesktopView && children}
+
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <div className="container-main">
@@ -43,11 +47,12 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <WhatIDo />
             <Career />
             <Work />
-            {isDesktopView && (
-              <Suspense fallback={<div>Loading....</div>}>
-                <TechStack />
-              </Suspense>
-            )}
+
+            {/* ✅ FIXED: removed isDesktopView condition — TechStack now renders on ALL screen sizes */}
+            <Suspense fallback={<div style={{ color: "#fff", textAlign: "center", padding: "60px 0" }}>Loading Skills...</div>}>
+              <TechStack />
+            </Suspense>
+
             <Contact />
           </div>
         </div>

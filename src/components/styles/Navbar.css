@@ -1,3 +1,6 @@
+/* ─────────────────────────────────────────
+   DESKTOP NAVBAR
+───────────────────────────────────────── */
 .header {
   display: flex;
   width: max-content;
@@ -12,7 +15,6 @@
   transform: translateX(-50%);
   top: 20px;
   z-index: 9999;
-  
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -20,70 +22,280 @@
   border-radius: 50px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
+
 .header ul {
   font-size: 12px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin: 0;
   padding: 0;
   list-style: none;
   column-gap: 40px;
   row-gap: 8px;
-  align-items: end;
+  align-items: center;
 }
+
 .header ul li {
-  margin-left: 0px;
+  margin-left: 0;
   letter-spacing: 1px;
-  color: #ccc;
+  color: #eae5ec;
   font-weight: 600;
   cursor: pointer;
 }
+
 .navbar-connect {
   display: none;
   font-size: 15px;
   letter-spacing: 1px;
   font-weight: 500;
 }
+
 .navbar-title {
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.2px;
 }
+
+/* ─────────────────────────────────────────
+   HAMBURGER BUTTON
+   Hidden on desktop, shown on mobile
+───────────────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #eae5ec;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animate to X when open */
+.hamburger--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger--open span:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+.hamburger--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ─────────────────────────────────────────
+   MOBILE OVERLAY (dimmed background)
+───────────────────────────────────────── */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  transition: background 0.35s ease, backdrop-filter 0.35s ease;
+  pointer-events: none;
+}
+
+.mobile-overlay--visible {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  pointer-events: all;
+}
+
+/* ─────────────────────────────────────────
+   MOBILE SIDE PANEL
+───────────────────────────────────────── */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: min(300px, 80vw);
+  z-index: 10001;
+  background: rgba(15, 12, 20, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 6px 0 40px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.mobile-nav--open {
+  transform: translateX(0);
+}
+
+/* Panel header row */
+.mobile-nav__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Close (✕) button */
+.mobile-nav__close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  font-size: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mobile-nav__close:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+/* Nav list */
+.mobile-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Each nav item slides in when panel opens */
+.mobile-nav__item {
+  opacity: 0;
+  transform: translateX(-18px);
+}
+
+.mobile-nav--open .mobile-nav__item {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.mobile-nav__item a {
+  display: flex;
+  align-items: center;
+  padding: 14px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: #b8b0c4;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, padding-left 0.2s;
+}
+
+.mobile-nav__item a:hover {
+  color: #ffffff;
+  border-left-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.04);
+  padding-left: 34px;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+───────────────────────────────────────── */
+
+/* Mobile: show hamburger, hide desktop ul */
+@media only screen and (max-width: 499px) {
+  .header ul {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobile-overlay,
+  .mobile-nav {
+    display: flex;
+  }
+
+  .header {
+    padding: 12px 20px;
+    gap: 12px;
+    /* Make it span full width like a top bar on very small screens */
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+    border-radius: 16px;
+    justify-content: space-between;
+  }
+}
+
 @media only screen and (min-width: 500px) {
   .header {
     padding: 15px 40px;
     gap: 40px;
   }
+
   .header ul {
     flex-direction: row;
     align-items: center;
     font-size: 14px;
     column-gap: 40px;
   }
+
   .header ul li {
     color: #eae5ec;
   }
+
   .navbar-title {
     font-size: 16px;
   }
 }
+
 @media only screen and (min-width: 900px) {
   .navbar-connect {
     display: block;
   }
 }
+
 @media only screen and (min-width: 1200px) {
   .header {
     padding: 20px 50px;
     gap: 60px;
   }
+
   .header ul {
     column-gap: 60px;
     font-size: 16px;
   }
+
   .navbar-connect {
     font-size: 16px;
   }
+
   .navbar-title {
     font-size: 18px;
   }
