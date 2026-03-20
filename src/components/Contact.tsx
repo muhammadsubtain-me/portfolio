@@ -42,7 +42,7 @@ const Contact = () => {
               Linkedin <MdArrowOutward />
             </a>
             <a
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/muhammad._.sibtain/"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
@@ -50,7 +50,7 @@ const Contact = () => {
               Instagram <MdArrowOutward />
             </a>
             <a
-              href="https://www.facebook.com/"
+              href="https://www.facebook.com/muhammad.sibtain.956909"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
