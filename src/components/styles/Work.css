@@ -26,6 +26,8 @@
 .carousel-wrapper {
   position: relative;
   width: 100%;
+  /* Clip any slide bleed at the wrapper level too */
+  overflow: hidden;
 }
 
 .carousel-track-container {
@@ -33,7 +35,6 @@
   width: 100%;
   border-top: 1px solid #363636;
   border-bottom: 1px solid #363636;
-  /* Needed so scrollbar sits at bottom inside this container */
   position: relative;
 }
 
@@ -41,13 +42,18 @@
   display: flex;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
+  /* Ensure track never exceeds its container */
+  width: 100%;
 }
 
 .carousel-slide {
   min-width: 100%;
+  /* Use width instead of min-width alone to be explicit */
+  width: 100%;
   flex-shrink: 0;
   box-sizing: border-box;
   padding: 50px 0;
+  /* Clip any internal overflow within each slide */
   overflow: hidden;
 }
 
@@ -58,6 +64,7 @@
   width: 100%;
   min-height: 300px;
   padding: 0 15px;
+  box-sizing: border-box;
 }
 
 .carousel-info {
@@ -65,6 +72,8 @@
   display: flex;
   gap: 30px;
   align-items: flex-start;
+  /* Prevent info from overflowing its flex cell */
+  min-width: 0;
 }
 
 .carousel-number h3 {
@@ -79,6 +88,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .carousel-details h4 {
@@ -118,6 +128,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 0;
 }
 
 /* ── Desktop Navigation Arrows ── */
@@ -285,29 +296,59 @@
     display: none;
   }
 
+  /* CRITICAL: both wrapper and container must clip on mobile */
+  .carousel-wrapper {
+    overflow: hidden;
+  }
+
+  .carousel-track-container {
+    overflow: hidden;
+    /* Ensure it has an explicit width so slides measure correctly */
+    width: 100%;
+  }
+
+  .carousel-track {
+    /* translateX must be based on exact 100% of container width */
+    width: 100%;
+  }
+
   .carousel-slide {
-    /* Extra bottom padding to make room for scrollbar above the border */
-    padding: 24px 0 40px;
+    /* Explicit 100% width — min-width alone can be unreliable on mobile */
+    min-width: 100%;
+    width: 100%;
+    padding: 24px 0 44px;
+    /* Hard clip anything inside that bleeds */
+    overflow: hidden;
   }
 
   .carousel-content {
     flex-direction: column;
     gap: 16px;
-    padding: 0 12px;
+    /* Use padding not margin so it stays within 100% width */
+    padding: 0 16px;
     min-height: unset;
+    box-sizing: border-box;
+    /* Prevent any child from pushing width past 100% */
+    max-width: 100%;
   }
 
-  .carousel-info { gap: 16px; }
+  .carousel-info {
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .carousel-image-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   .carousel-number h3 { font-size: 28px; }
   .carousel-details h4 { font-size: 18px; }
   .carousel-category { font-size: 14px; }
   .carousel-tools p { font-size: 13px; }
 
-  /*
-    Scrollbar track — absolutely positioned at the bottom
-    of .carousel-track-container, just above the border-bottom.
-    Full width, acts as the drag zone.
-  */
+  /* Scrollbar track inside container, above bottom border */
   .mobile-scrollbar-track {
     display: block;
     position: absolute;
@@ -321,7 +362,6 @@
     z-index: 5;
   }
 
-  /* Draggable thumb */
   .mobile-scrollbar-thumb {
     position: absolute;
     top: 0;
@@ -330,9 +370,8 @@
     border-radius: 999px;
     box-shadow: 0 0 8px rgba(94, 234, 212, 0.6);
     cursor: grab;
-    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                width 0.3s ease;
-    touch-action: none; /* required for pointer events on touch */
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: none;
   }
 
   .mobile-scrollbar-thumb:active {
